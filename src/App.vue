@@ -6,7 +6,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "./utils/firebase.js"
 import { ref } from "vue"
 
-const addError = ref('ok!')
+const result = ref("")
 
 async function addData() {
   console.log(
@@ -18,8 +18,9 @@ try {
     current: current.value,
     watch: watch.value
   });
+  result.value = "ok!"
 } catch (e) {
-  addError.value = "Error adding document"
+  result.value = "Error adding"
 }
 }
 </script>
@@ -29,7 +30,7 @@ try {
     <div class="add-data">
       <div>
         <span @click="addData" class="btn-add">Save Data</span>
-        <span>{{ addError }}</span>
+        <span>{{ result }}</span>
       </div>
     </div>
 
