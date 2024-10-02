@@ -1,10 +1,38 @@
 <script setup>
 import { current, currentGeo } from "./utils/geo.js"
 import { watch, watchGeo } from "./utils/watch.js"
+
+import { addDoc, collection } from "firebase/firestore"; 
+import { db } from "./utils/firebase.js"
+import { ref } from "vue"
+
+const addError = ref('ok!')
+
+async function addData() {
+  console.log(
+    {current: current.value,
+    watch: watch.value}
+  )
+try {
+  const docRef = await addDoc(collection(db, "run"), {
+    current: current.value,
+    watch: watch.value
+  });
+} catch (e) {
+  addError.value = "Error adding document"
+}
+}
 </script>
 
 <template>
   <div class="main">
+    <div class="add-data">
+      <div>
+        <span @click="addData" class="btn-add">Save Data</span>
+        <span>{{ addError }}</span>
+      </div>
+    </div>
+
     <div class="current">
       <div>
         <span @click="currentGeo" class="btn-current">Start Current</span>
@@ -22,15 +50,21 @@ import { watch, watchGeo } from "./utils/watch.js"
 </template>
 
 <style scoped>
+.add-data {
+  padding: 20px 10px;  
+  border-bottom: 1px solid blue;
+
+}
 .current {
   border-bottom: 1px solid blue;
   padding: 20px 10px;  
 }
 .watch {
   padding: 20px 10px;
+  border-bottom: 1px solid blue;
 }
 
-.btn-current, .btn-watch {
+.btn-current, .btn-watch, .btn-add {
   display: inline;
 
   font-size: 25px;
